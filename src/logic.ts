@@ -135,6 +135,8 @@ export function createSideSplitContext() {
     drag.startDrag()
   }
 
+  const sepStore = new Map<string, number>()
+
   return {
     left,
     right,
@@ -143,5 +145,6 @@ export function createSideSplitContext() {
     vertical,
     dragging,
     startDrag,
+    sepStore,
   }
 }

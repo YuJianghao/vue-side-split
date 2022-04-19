@@ -157,15 +157,6 @@ function parseNumber(value: any, init?: number): number | undefined {
     return value
   return parseInt(value, 10)
 }
-function parseConfig(props: any): PartConfig {
-  const min = parseNumber(props.min, 0)!
-  const max = parseNumber(props.max, Infinity)!
-  const modelValue = parseNumber(props.modelValue)
-  if (modelValue === undefined)
-    throw new Error('must provide init prop')
-  const update = props['onUpdate:modelValue'] ?? (() => {})
-  return { min, max, modelValue, update }
-}
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
@@ -216,13 +207,41 @@ export const SideSplit = defineComponent({
         )
       }
 
+      function parseConfig(props: any, key: string): PartConfig {
+        const min = parseNumber(props.min, 0)!
+        const max = parseNumber(props.max, Infinity)!
+        const propsModelValue = parseNumber(
+          props.modelValue ?? props['model-value'],
+        )
+        if (propsModelValue === undefined)
+          throw new Error('must provide init prop')
+        const updateVModel = props['onUpdate:modelValue']
+        const updateSepStore = (value: number) => {
+          context.sepStore.set(key, value)
+        }
+        if (!updateVModel) {
+          if (!context.sepStore.has(key))
+            context.sepStore.set(key, propsModelValue)
+        }
+        const sepStoreModelValue = context.sepStore.get(key)!
+        const update = updateVModel ?? updateSepStore
+        return {
+          min,
+          max,
+          modelValue: updateVModel ? propsModelValue : sepStoreModelValue,
+          update,
+        }
+      }
+
       const mainPanel = panels.find(ch => ch.type === MainPart)!
       const mainPanelIdx = panels.indexOf(mainPanel)
       const leftPanel = panels.slice(0, mainPanelIdx)
-      const leftConfig = leftPanel.map(ch => parseConfig(ch.props))
+      const leftConfig = leftPanel.map((ch, idx) =>
+        parseConfig(ch.props, `left-${idx}`),
+      )
       const rightPanel = panels.slice(mainPanelIdx + 1)
       const rightConfig = rightPanel
-        .map(ch => parseConfig(ch.props))
+        .map((ch, idx) => parseConfig(ch.props, `right-${idx}`))
         .reverse()
       context.left.config.value = leftConfig
       context.right.config.value = rightConfig
