@@ -42,7 +42,7 @@ export function useDrag({ onDrag, onDragEnd }: {
     dragging.value = true
     source.value = { x: x.value, y: y.value }
   }
-  return { startDrag, resetDrag }
+  return { startDrag, resetDrag, dragging }
 }
 
 export function useAxisDrag(axis: Ref<'x'|'y'>, cbs: {

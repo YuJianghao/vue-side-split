@@ -93,6 +93,8 @@ const drag = useAxisDrag(axis, {
   },
 })
 
+export const dragging = drag.dragging
+
 export const startDrag = (idx: number, key: PartKey) => {
   split.value = { idx, key }
   drag.startDrag()

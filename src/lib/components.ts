@@ -1,7 +1,7 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
 import type { StyleValue } from 'vue'
-import { gap, vertical } from './logic'
+import { dragging, gap, vertical } from './logic'
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
@@ -9,6 +9,7 @@ export const SideSplit = defineComponent({
     const style = computed<StyleValue>(() => {
       return {
         display: 'flex',
+        userSelect: dragging.value ? 'none' : undefined,
         ...(vertical.value && { flexDirection: 'column' }),
       }
     })
@@ -50,7 +51,8 @@ export const MainPart = defineComponent({
     const style = computed<StyleValue>(() => {
       return {
         flexGrow: 1,
-        flexShrink: 1,
+        flexShrink: 0,
+        flexBasis: `${gap.value}px`,
         border: '1px solid blue',
         overflow: 'hidden',
       }
@@ -69,12 +71,14 @@ export const SplitterPart = defineComponent({
       const statics: StyleValue = {
         zIndex: 1,
         background: 'green',
+        flexShrink: 0,
       }
       if (vertical.value) {
         return {
           height: `${gap.value}px`,
           width: '100%',
           margin: `-${gap.value / 2}px 0`,
+          cursor: 'row-resize',
           ...statics,
         }
       }
@@ -83,6 +87,7 @@ export const SplitterPart = defineComponent({
           height: '100%',
           width: `${gap.value}px`,
           margin: `0 -${gap.value / 2}px`,
+          cursor: 'col-resize',
           ...statics,
         }
       }
