@@ -1,11 +1,12 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
 import type { StyleValue } from 'vue'
-import { dragging, gap, vertical } from './logic'
+import { useContext } from './logic'
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
   setup(_, { slots }) {
+    const { dragging, vertical } = useContext()
     const style = computed<StyleValue>(() => {
       return {
         display: 'flex',
@@ -48,6 +49,7 @@ export const SidePart = defineComponent({
 export const MainPart = defineComponent({
   name: 'MainPart',
   setup(_, { slots }) {
+    const { gap } = useContext()
     const style = computed<StyleValue>(() => {
       return {
         flexGrow: 1,
@@ -67,6 +69,7 @@ export const MainPart = defineComponent({
 export const SplitterPart = defineComponent({
   name: 'SplitterPart',
   setup() {
+    const { vertical, gap } = useContext()
     const style = computed<StyleValue>(() => {
       const statics: StyleValue = {
         zIndex: 1,

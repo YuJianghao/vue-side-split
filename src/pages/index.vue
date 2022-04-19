@@ -1,20 +1,23 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
 import { MainPart, SidePart, SideSplit, SplitterPart } from '~/lib/components'
-import { definePart, partMap, startDrag, vertical } from '~/lib/logic'
-definePart(ref([
+import { createSideSplitContext, provideContext } from '~/lib/logic'
+const context = createSideSplitContext()
+context.left.config.value = [
   { min: 0, max: 150, init: 20 },
   { min: 0, max: 150, init: 20 },
   { min: 0, max: 150, init: 20 },
-]), 'left')
-definePart(ref([
+]
+context.right.config.value = [
   { min: 0, max: 150, init: 20 },
   { min: 0, max: 150, init: 20 },
   { min: 0, max: 150, init: 20 },
-]), 'right')
-vertical.value = true
-const left = partMap.get('left')!
-const right = partMap.get('right')!
+]
+const vertical = context.vertical
+const left = context.left
+const right = context.right
+const startDrag = context.startDrag
+provideContext(context)
 </script>
 
 <template>
