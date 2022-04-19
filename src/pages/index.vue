@@ -10,11 +10,11 @@ const vertical = ref(false)
     <label whitespace-nowrap text-base>
       vertical
       <input v-model="vertical" type="checkbox" hidden>
-      <div v-if="vertical" i="carbon-checkbox-checked" vertical-text-bottom inline-block />
-      <div v-else i="carbon-checkbox" vertical-text-bottom inline-block />
+      <div v-if="vertical" i="carbon-checkbox-checked" icon />
+      <div v-else i="carbon-checkbox" icon />
     </label>
   </div>
-  <SideSplit w-full h-100 border border-gray-500:50 :vertical="vertical">
+  <SideSplit class="index-page" w-full h-100 border border-gray-500:50 :vertical="vertical">
     <SidePart :min="0" :init="30" :max="50">
       <Board>
         1
@@ -53,7 +53,7 @@ const vertical = ref(false)
   </SideSplit>
 </template>
 <style lang="less">
-.splitter{
+.index-page > .splitter{
   background: rgba(127, 127, 127, 0.1);
   transition: background .2s ease-in-out;
   &:hover{

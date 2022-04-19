@@ -150,7 +150,7 @@ export const Panel = defineComponent({
     }
   },
 })
-function parseNumber(value: any, init?: number): number|undefined {
+function parseNumber(value: any, init?: number): number | undefined {
   if (value === undefined)
     return init
   if (typeof value === 'number')
@@ -171,7 +171,11 @@ export const SideSplit = defineComponent({
   props: {
     vertical: {
       type: Boolean,
-      required: true,
+      default: false,
+    },
+    gap: {
+      type: Number,
+      default: 10,
     },
   },
   setup(props, { slots }) {
@@ -181,6 +185,14 @@ export const SideSplit = defineComponent({
       (v) => {
         context.vertical.value = v
       },
+      { immediate: true },
+    )
+    watch(
+      () => props.gap,
+      (v) => {
+        context.gap.value = v
+      },
+      { immediate: true },
     )
     provideContext(context)
     const { vertical } = context
@@ -197,15 +209,20 @@ export const SideSplit = defineComponent({
       )
 
       const mainCount = panels.filter(ch => ch.type === MainPart).length
-      if (mainCount !== 1)
-        throw new Error(`Must provide one ${MainPart.name} component, but found ${mainCount}`)
+      if (mainCount !== 1) {
+        throw new Error(
+          `Must provide one ${MainPart.name} component, but found ${mainCount}`,
+        )
+      }
 
       const mainPanel = panels.find(ch => ch.type === MainPart)!
       const mainPanelIdx = panels.indexOf(mainPanel)
       const leftPanel = panels.slice(0, mainPanelIdx)
       const leftConfig = leftPanel.map(ch => parseConfig(ch.props))
       const rightPanel = panels.slice(mainPanelIdx + 1)
-      const rightConfig = rightPanel.map(ch => parseConfig(ch.props)).reverse()
+      const rightConfig = rightPanel
+        .map(ch => parseConfig(ch.props))
+        .reverse()
       context.left.config.value = leftConfig
       context.right.config.value = rightConfig
       const content = [
