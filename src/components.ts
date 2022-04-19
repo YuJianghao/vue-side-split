@@ -1,14 +1,14 @@
 /* eslint-disable vue/one-component-per-file */
-import { computed, defineComponent, h, watch } from 'vue'
-import type { PropType, StyleValue } from 'vue'
-import type { PartConfig } from './logic'
-import { createSideSplitContext, provideContext, useContext } from './logic'
+import { computed, defineComponent, h, ref, watch } from "vue"
+import type { PropType, StyleValue } from "vue"
+import type { PartConfig } from "./logic"
+import { createSideSplitContext, provideContext, useContext } from "./logic"
 export const SidePart = defineComponent({
-  name: 'SidePart',
+  name: "SidePart",
   props: {
     min: Number,
     max: Number,
-    init: {
+    modelValue: {
       type: Number,
       required: true,
     },
@@ -19,14 +19,14 @@ export const SidePart = defineComponent({
 })
 
 export const MainPart = defineComponent({
-  name: 'MainPart',
+  name: "MainPart",
   render() {
     return this.$slots.default?.() ?? []
   },
 })
 
 const RenderSidePart = defineComponent({
-  name: 'RenderSidePart',
+  name: "RenderSidePart",
   props: {
     width: {
       type: Number,
@@ -40,19 +40,19 @@ const RenderSidePart = defineComponent({
         flexBasis: `${props.width}px`,
         flexGrow: 0,
         flexShrink: 0,
-        overflow: 'hidden',
-        userSelect: dragging.value ? 'none' : undefined,
+        overflow: "hidden",
+        userSelect: dragging.value ? "none" : undefined,
       }
     })
     return () => {
       const children = slots.default?.() ?? []
-      return h('div', { class: 'side-part', style: style.value }, children)
+      return h("div", { class: "side-part", style: style.value }, children)
     }
   },
 })
 
 const RenderMainPart = defineComponent({
-  name: 'RenderMainPart',
+  name: "RenderMainPart",
   setup(_, { slots }) {
     const { gap, dragging } = useContext()
     const style = computed<StyleValue>(() => {
@@ -60,26 +60,26 @@ const RenderMainPart = defineComponent({
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: `${gap.value}px`,
-        overflow: 'hidden',
-        userSelect: dragging.value ? 'none' : undefined,
+        overflow: "hidden",
+        userSelect: dragging.value ? "none" : undefined,
       }
     })
     return () => {
       const children = slots.default?.() ?? []
-      return h('div', { class: 'main-part', style: style.value }, children)
+      return h("div", { class: "main-part", style: style.value }, children)
     }
   },
 })
 
 export const SplitterPart = defineComponent({
-  name: 'SplitterPart',
+  name: "SplitterPart",
   props: {
     id: {
       type: Number,
       required: true,
     },
     type: {
-      type: String as PropType<'left' | 'right'>,
+      type: String as PropType<"left" | "right">,
       required: true,
     },
   },
@@ -93,26 +93,25 @@ export const SplitterPart = defineComponent({
       if (vertical.value) {
         return {
           height: `${gap.value}px`,
-          width: '100%',
+          width: "100%",
           margin: `-${gap.value / 2}px 0`,
-          cursor: 'row-resize',
+          cursor: "row-resize",
           ...statics,
         }
-      }
-      else {
+      } else {
         return {
-          height: '100%',
+          height: "100%",
           width: `${gap.value}px`,
           margin: `0 -${gap.value / 2}px`,
-          cursor: 'col-resize',
+          cursor: "col-resize",
           ...statics,
         }
       }
     })
     return () => {
-      return h('div', {
+      return h("div", {
         style: style.value,
-        class: 'splitter',
+        class: "splitter",
         onMousedown: () => startDrag(props.id, props.type),
       })
     }
@@ -120,11 +119,11 @@ export const SplitterPart = defineComponent({
 })
 
 export const Panel = defineComponent({
-  name: 'Panel',
+  name: "Panel",
   props: {
     id: Number,
     type: {
-      type: String as PropType<'left' | 'right' | 'main'>,
+      type: String as PropType<"left" | "right" | "main">,
       required: true,
     },
   },
@@ -133,16 +132,16 @@ export const Panel = defineComponent({
     return () => {
       const children = slots.default?.() ?? []
       switch (props.type) {
-        case 'main':
+        case "main":
           return h(RenderMainPart, () => children)
-        case 'left':
-        case 'right':
+        case "left":
+        case "right":
           return h(
             RenderSidePart,
             {
               width: context[props.type].width.value[props.id!],
             },
-            () => children,
+            () => children
           )
         default:
           break
@@ -151,23 +150,21 @@ export const Panel = defineComponent({
   },
 })
 function parseNumber(value: any, init?: number): number | undefined {
-  if (value === undefined)
-    return init
-  if (typeof value === 'number')
-    return value
+  if (value === undefined) return init
+  if (typeof value === "number") return value
   return parseInt(value, 10)
 }
 function parseConfig(props: any): PartConfig {
   const min = parseNumber(props.min, 0)!
   const max = parseNumber(props.max, Infinity)!
-  const init = parseNumber(props.init)
-  if (init === undefined)
-    throw new Error('must provide init prop')
-  return { min, max, init }
+  const modelValue = parseNumber(props.modelValue)
+  if (modelValue === undefined) throw new Error("must provide init prop")
+  const update = props["onUpdate:modelValue"] ?? (() => {})
+  return { min, max, modelValue, update }
 }
 
 export const SideSplit = defineComponent({
-  name: 'SideSplit',
+  name: "SideSplit",
   props: {
     vertical: {
       type: Boolean,
@@ -185,65 +182,65 @@ export const SideSplit = defineComponent({
       (v) => {
         context.vertical.value = v
       },
-      { immediate: true },
+      { immediate: true }
     )
     watch(
       () => props.gap,
       (v) => {
         context.gap.value = v
       },
-      { immediate: true },
+      { immediate: true }
     )
     provideContext(context)
     const { vertical } = context
     const style = computed<StyleValue>(() => {
       return {
-        display: 'flex',
-        ...(vertical.value && { flexDirection: 'column' }),
+        display: "flex",
+        ...(vertical.value && { flexDirection: "column" }),
       }
     })
     return () => {
       const children = slots.default?.() ?? []
       const panels = children.filter(
-        ch => ch.type === SidePart || ch.type === MainPart,
+        (ch) => ch.type === SidePart || ch.type === MainPart
       )
 
-      const mainCount = panels.filter(ch => ch.type === MainPart).length
+      const mainCount = panels.filter((ch) => ch.type === MainPart).length
       if (mainCount !== 1) {
         throw new Error(
-          `Must provide one ${MainPart.name} component, but found ${mainCount}`,
+          `Must provide one ${MainPart.name} component, but found ${mainCount}`
         )
       }
 
-      const mainPanel = panels.find(ch => ch.type === MainPart)!
+      const mainPanel = panels.find((ch) => ch.type === MainPart)!
       const mainPanelIdx = panels.indexOf(mainPanel)
       const leftPanel = panels.slice(0, mainPanelIdx)
-      const leftConfig = leftPanel.map(ch => parseConfig(ch.props))
+      const leftConfig = leftPanel.map((ch) => parseConfig(ch.props))
       const rightPanel = panels.slice(mainPanelIdx + 1)
       const rightConfig = rightPanel
-        .map(ch => parseConfig(ch.props))
+        .map((ch) => parseConfig(ch.props))
         .reverse()
       context.left.config.value = leftConfig
       context.right.config.value = rightConfig
       const content = [
         ...leftPanel.map((ch, id) => [
           // @ts-expect-error todo
-          h(Panel, { id, type: 'left' }, ch.children),
-          h(SplitterPart, { id, type: 'left' }),
+          h(Panel, { id, type: "left" }, ch.children),
+          h(SplitterPart, { id, type: "left" }),
         ]),
         // @ts-expect-error todo
-        h(Panel, { type: 'main' }, mainPanel.children),
+        h(Panel, { type: "main" }, mainPanel.children),
         ...rightPanel
           .map((ch, id) =>
             [
               // @ts-expect-error todo
-              h(Panel, { id, type: 'right' }, ch.children),
-              h(SplitterPart, { id, type: 'right' }),
-            ].reverse(),
+              h(Panel, { id, type: "right" }, ch.children),
+              h(SplitterPart, { id, type: "right" }),
+            ].reverse()
           )
           .reverse(),
       ]
-      return h('div', { style: style.value }, content)
+      return h("div", { style: style.value }, content)
     }
   },
 })
