@@ -152,6 +152,21 @@ export const Panel = defineComponent({
     }
   },
 })
+function parseNumber(value: any, init?: number): number|undefined {
+  if (value === undefined)
+    return init
+  if (typeof value === 'number')
+    return value
+  return parseInt(value, 10)
+}
+function parseConfig(props: any): PartConfig {
+  const min = parseNumber(props.min, 0)!
+  const max = parseNumber(props.max, Infinity)!
+  const init = parseNumber(props.init)
+  if (init === undefined)
+    throw new Error('must provide init prop')
+  return { min, max, init }
+}
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
@@ -182,15 +197,19 @@ export const SideSplit = defineComponent({
       const panels = children.filter(
         ch => ch.type === SidePart || ch.type === MainPart,
       )
-      // TODO check panels
+
+      const mainCount = panels.filter(ch => ch.type === MainPart).length
+      if (mainCount !== 1)
+        throw new Error(`Must provide one ${MainPart.name} component, but found ${mainCount}`)
+
       const mainPanel = panels.find(ch => ch.type === MainPart)!
       const mainPanelIdx = panels.indexOf(mainPanel)
       const leftPanel = panels.slice(0, mainPanelIdx)
-      const leftConfig = leftPanel.map(ch => ch.props)
+      const leftConfig = leftPanel.map(ch => parseConfig(ch.props))
       const rightPanel = panels.slice(mainPanelIdx + 1)
-      const rightConfig = rightPanel.map(ch => ch.props).reverse()
-      context.left.config.value = leftConfig as PartConfig[] // TODO parse props
-      context.right.config.value = rightConfig as PartConfig[] // TODO parse props
+      const rightConfig = rightPanel.map(ch => parseConfig(ch.props)).reverse()
+      context.left.config.value = leftConfig
+      context.right.config.value = rightConfig
       const content = [
         ...leftPanel.map((ch, id) => [
           // @ts-expect-error todo
