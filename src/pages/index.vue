@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
 import { MainPart, SidePart, SideSplit } from '~/lib/components'
+import Board from '~/components/Board.vue'
 const vertical = ref(false)
 </script>
 
 <template>
-  <div>
+  <div p6 select-none>
     <label whitespace-nowrap text-base>
       vertical
       <input v-model="vertical" type="checkbox" hidden>
@@ -13,27 +14,41 @@ const vertical = ref(false)
       <div v-else i="carbon-checkbox" vertical-text-bottom inline-block />
     </label>
   </div>
-  <SideSplit w-full h-100 border :vertical="vertical">
-    <SidePart :min="0" :init="10" :max="50">
-      side1
-    </SidePart>
-    <SidePart :min="0" :init="20" :max="50">
-      side2
+  <SideSplit w-full h-100 border border-gray-500:50 :vertical="vertical">
+    <SidePart :min="0" :init="30" :max="50">
+      <Board>
+        1
+      </Board>
     </SidePart>
     <SidePart :min="0" :init="30" :max="50">
-      side3
+      <Board>
+        2
+      </Board>
+    </SidePart>
+    <SidePart :min="0" :init="30" :max="50">
+      <Board>
+        3
+      </Board>
     </SidePart>
     <MainPart type="main">
-      main
+      <Board>
+        main
+      </Board>
     </MainPart>
     <SidePart :min="0" :init="30" :max="50">
-      side3
+      <Board>
+        3
+      </Board>
     </SidePart>
-    <SidePart :min="0" :init="20" :max="50">
-      side2
+    <SidePart :min="0" :init="30" :max="50">
+      <Board>
+        2
+      </Board>
     </SidePart>
-    <SidePart :min="0" :init="10" :max="50">
-      side1
+    <SidePart :min="0" :init="30" :max="50">
+      <Board>
+        1
+      </Board>
     </SidePart>
   </SideSplit>
 </template>
