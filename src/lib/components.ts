@@ -32,6 +32,7 @@ export const SidePart = defineComponent({
         flexGrow: 0,
         flexShrink: 0,
         border: '1px solid red',
+        overflow: 'hidden',
       }
     })
     return () => {
@@ -49,11 +50,30 @@ export const MainPart = defineComponent({
         flexGrow: 1,
         flexShrink: 1,
         border: '1px solid blue',
+        overflow: 'hidden',
       }
     })
     return () => {
       const children = slots.default?.() ?? []
       return h('div', { style: style.value }, children)
+    }
+  },
+})
+
+export const SplitterPart = defineComponent({
+  name: 'SplitterPart',
+  setup() {
+    const style = computed<StyleValue>(() => {
+      return {
+        height: '100%',
+        width: '10px',
+        margin: '0 -5px',
+        background: 'green',
+        zIndex: 1,
+      }
+    })
+    return () => {
+      return h('div', { style: style.value })
     }
   },
 })

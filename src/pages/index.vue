@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MainPart, SidePart, SideSplit } from '~/lib/components'
+import { MainPart, SidePart, SideSplit, SplitterPart } from '~/lib/components'
 </script>
 
 <template>
@@ -7,12 +7,15 @@ import { MainPart, SidePart, SideSplit } from '~/lib/components'
     <SidePart :width="100">
       side1
     </SidePart>
+    <SplitterPart />
     <SidePart :width="100">
       side2
     </SidePart>
+    <SplitterPart />
     <SidePart :width="100">
       side3
     </SidePart>
+    <SplitterPart />
     <MainPart>
       main
     </MainPart>
