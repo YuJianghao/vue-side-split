@@ -8,7 +8,7 @@ export interface PartConfig {
   init: number
 }
 
-export const partMap = new Map<string, Part>()
+export const partMap = new Map<PartKey, Part>()
 
 function createPart(config: Ref<PartConfig[]>) {
   const raw = ref<number[]>([])
@@ -27,14 +27,24 @@ function createPart(config: Ref<PartConfig[]>) {
   return { raw, tmp, config, width }
 }
 
-export function definePart(config: Ref<PartConfig[]>, key: string) {
+export function definePart(config: Ref<PartConfig[]>, key: PartKey) {
   const part = createPart(config)
   partMap.set(key, part)
 }
 
+export type PartKey = 'left'|'right'
 export type Part = ReturnType<typeof createPart>
 
-export const split = ref<{ idx: number; key: string } | null>(null)
+export const split = ref<{ idx: number; key: PartKey } | null>(null)
+
+function getSign(key: PartKey) {
+  switch (key) {
+    case 'left':
+      return 1
+    case 'right':
+      return -1
+  }
+}
 
 const drag = useAxisDrag(ref('x'), {
   onDrag(source, target) {
@@ -43,7 +53,7 @@ const drag = useAxisDrag(ref('x'), {
     const key = split.value.key
     const idx = split.value.idx
     const part = partMap.get(key)!
-    const delta = target - source
+    const delta = (target - source) * getSign(key)
     function update(delta: number, idx: number) {
       if (idx < 0 || idx >= part.config.value.length)
         return
@@ -73,7 +83,7 @@ const drag = useAxisDrag(ref('x'), {
   },
 })
 
-export const startDrag = (idx: number, key: string) => {
+export const startDrag = (idx: number, key: PartKey) => {
   split.value = { idx, key }
   drag.startDrag()
 }

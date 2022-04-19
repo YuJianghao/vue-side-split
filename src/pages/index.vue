@@ -7,7 +7,13 @@ definePart(ref([
   { min: 0, max: 150, init: 100 },
   { min: 0, max: 150, init: 100 },
 ]), 'left')
+definePart(ref([
+  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 100 },
+]), 'right')
 const left = partMap.get('left')!
+const right = partMap.get('right')!
 </script>
 
 <template>
@@ -27,6 +33,18 @@ const left = partMap.get('left')!
     <MainPart>
       main
     </MainPart>
+    <SplitterPart @mousedown="startDrag(2,'right')" />
+    <SidePart :width="right.width.value[2]">
+      side3
+    </SidePart>
+    <SplitterPart @mousedown="startDrag(1,'right')" />
+    <SidePart :width="right.width.value[1]">
+      side2
+    </SidePart>
+    <SplitterPart @mousedown="startDrag(0,'right')" />
+    <SidePart :width="right.width.value[0]">
+      side1
+    </SidePart>
   </SideSplit>
 </template>
 
