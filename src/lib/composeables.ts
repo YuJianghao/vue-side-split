@@ -16,8 +16,14 @@ export function useDrag({ onDrag, onDragEnd }: {
   const source = ref<Point>({ x: 0, y: 0 })
   const target = ref<Point>({ x: 0, y: 0 })
   useEventListener(window, 'mousemove', () => {
+    if (!dragging.value)
+      return
     target.value = { x: x.value, y: y.value }
     onDrag(source.value, target.value)
+  })
+  useEventListener(window, 'mouseleave', () => {
+    onDragEnd(source.value, target.value)
+    resetDrag()
   })
   useEventListener(window, 'mouseup', () => {
     onDragEnd(source.value, target.value)
