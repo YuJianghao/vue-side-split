@@ -1,7 +1,7 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
 import type { StyleValue } from 'vue'
-import { gap } from './logic'
+import { gap, vertical } from './logic'
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
@@ -9,6 +9,7 @@ export const SideSplit = defineComponent({
     const style = computed<StyleValue>(() => {
       return {
         display: 'flex',
+        ...(vertical.value && { flexDirection: 'column' }),
       }
     })
     return () => {
@@ -65,12 +66,25 @@ export const SplitterPart = defineComponent({
   name: 'SplitterPart',
   setup() {
     const style = computed<StyleValue>(() => {
-      return {
-        height: '100%',
-        width: `${gap.value}px`,
-        margin: `0 -${gap.value / 2}px`,
-        background: 'green',
+      const statics: StyleValue = {
         zIndex: 1,
+        background: 'green',
+      }
+      if (vertical.value) {
+        return {
+          height: `${gap.value}px`,
+          width: '100%',
+          margin: `-${gap.value / 2}px 0`,
+          ...statics,
+        }
+      }
+      else {
+        return {
+          height: '100%',
+          width: `${gap.value}px`,
+          margin: `0 -${gap.value / 2}px`,
+          ...statics,
+        }
       }
     })
     return () => {

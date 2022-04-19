@@ -1,22 +1,31 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
 import { MainPart, SidePart, SideSplit, SplitterPart } from '~/lib/components'
-import { definePart, partMap, startDrag } from '~/lib/logic'
+import { definePart, partMap, startDrag, vertical } from '~/lib/logic'
 definePart(ref([
-  { min: 0, max: 150, init: 100 },
-  { min: 0, max: 150, init: 100 },
-  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 20 },
+  { min: 0, max: 150, init: 20 },
+  { min: 0, max: 150, init: 20 },
 ]), 'left')
 definePart(ref([
-  { min: 0, max: 150, init: 100 },
-  { min: 0, max: 150, init: 100 },
-  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 20 },
+  { min: 0, max: 150, init: 20 },
+  { min: 0, max: 150, init: 20 },
 ]), 'right')
+vertical.value = true
 const left = partMap.get('left')!
 const right = partMap.get('right')!
 </script>
 
 <template>
+  <div>
+    <label whitespace-nowrap text-base>
+      vertical
+      <input v-model="vertical" type="checkbox" hidden>
+      <div v-if="vertical" i="carbon-checkbox-checked" vertical-text-bottom inline-block />
+      <div v-else i="carbon-checkbox" vertical-text-bottom inline-block />
+    </label>
+  </div>
   <SideSplit w-full h-100 border>
     <SidePart :width="left.width.value[0]">
       side1

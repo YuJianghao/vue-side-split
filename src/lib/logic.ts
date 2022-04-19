@@ -37,6 +37,11 @@ export type Part = ReturnType<typeof createPart>
 
 export const split = ref<{ idx: number; key: PartKey } | null>(null)
 export const gap = ref<number>(10)
+const axis = ref<'x'|'y'>('x')
+export const vertical = ref(false)
+watch(vertical, (v) => {
+  axis.value = v ? 'y' : 'x'
+})
 
 function getSign(key: PartKey) {
   switch (key) {
@@ -47,7 +52,7 @@ function getSign(key: PartKey) {
   }
 }
 
-const drag = useAxisDrag(ref('x'), {
+const drag = useAxisDrag(axis, {
   onDrag(source, target) {
     if (!split.value)
       return
@@ -58,7 +63,10 @@ const drag = useAxisDrag(ref('x'), {
     function update(delta: number, idx: number) {
       if (idx < 0 || idx >= part.config.value.length)
         return
-      const min = Math.max(part.config.value[idx].min, idx ? gap.value : gap.value / 2)
+      const min = Math.max(
+        part.config.value[idx].min,
+        idx ? gap.value : gap.value / 2,
+      )
       const max = part.config.value[idx].max
       const current = part.raw.value[idx]
       const next = current + delta
