@@ -1,8 +1,9 @@
 <script setup lang="ts">
-/* eslint-disable no-console */
 import { MainPart, SidePart, SideSplit } from '~/lib/components'
 import Board from '~/components/Board.vue'
+import Container from '~/components/Container.vue'
 const vertical = ref(false)
+const { t } = useI18n()
 </script>
 
 <template>
@@ -13,44 +14,50 @@ const vertical = ref(false)
       <div v-if="vertical" i="carbon-checkbox-checked" icon />
       <div v-else i="carbon-checkbox" icon />
     </label>
+
+    <RouterLink class="icon-btn mx-2" to="/vscode" btn>
+      {{ t('button.demo') }}
+    </RouterLink>
   </div>
-  <SideSplit class="index-page" w-full h-100 border border-gray-500:50 :vertical="vertical">
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        1
-      </Board>
-    </SidePart>
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        2
-      </Board>
-    </SidePart>
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        3
-      </Board>
-    </SidePart>
-    <MainPart type="main">
-      <Board>
-        main
-      </Board>
-    </MainPart>
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        3
-      </Board>
-    </SidePart>
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        2
-      </Board>
-    </SidePart>
-    <SidePart :min="0" :init="30" :max="50">
-      <Board>
-        1
-      </Board>
-    </SidePart>
-  </SideSplit>
+  <Container>
+    <SideSplit class="index-page" w-full h-100 border border-gray-500:50 :vertical="vertical">
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          1
+        </Board>
+      </SidePart>
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          2
+        </Board>
+      </SidePart>
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          3
+        </Board>
+      </SidePart>
+      <MainPart type="main">
+        <Board>
+          Hi SideSplit
+        </Board>
+      </MainPart>
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          3
+        </Board>
+      </SidePart>
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          2
+        </Board>
+      </SidePart>
+      <SidePart :min="0" :init="30" :max="50">
+        <Board>
+          1
+        </Board>
+      </SidePart>
+    </SideSplit>
+  </Container>
 </template>
 <style lang="less">
 .index-page > .splitter{
@@ -62,8 +69,3 @@ const vertical = ref(false)
   }
 }
 </style>
-
-<route lang="yaml">
-meta:
-  layout: home
-</route>
