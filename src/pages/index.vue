@@ -37,6 +37,16 @@ const vertical = ref(false)
     </SidePart>
   </SideSplit>
 </template>
+<style lang="less">
+.splitter{
+  background: rgba(127, 127, 127, 0.1);
+  transition: background .2s ease-in-out;
+  &:hover{
+    background: rgba(127, 127, 127, 0.5);
+    backdrop-filter: blur(2px);
+  }
+}
+</style>
 
 <route lang="yaml">
 meta:

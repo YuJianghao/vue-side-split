@@ -40,14 +40,13 @@ const RenderSidePart = defineComponent({
         flexBasis: `${props.width}px`,
         flexGrow: 0,
         flexShrink: 0,
-        border: '1px solid red',
         overflow: 'hidden',
         userSelect: dragging.value ? 'none' : undefined,
       }
     })
     return () => {
       const children = slots.default?.() ?? []
-      return h('div', { style: style.value }, children)
+      return h('div', { class: 'side-part', style: style.value }, children)
     }
   },
 })
@@ -61,14 +60,13 @@ const RenderMainPart = defineComponent({
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: `${gap.value}px`,
-        border: '1px solid blue',
         overflow: 'hidden',
         userSelect: dragging.value ? 'none' : undefined,
       }
     })
     return () => {
       const children = slots.default?.() ?? []
-      return h('div', { style: style.value }, children)
+      return h('div', { class: 'main-part', style: style.value }, children)
     }
   },
 })
@@ -90,7 +88,6 @@ export const SplitterPart = defineComponent({
     const style = computed<StyleValue>(() => {
       const statics: StyleValue = {
         zIndex: 1,
-        background: 'green',
         flexShrink: 0,
       }
       if (vertical.value) {
@@ -115,6 +112,7 @@ export const SplitterPart = defineComponent({
     return () => {
       return h('div', {
         style: style.value,
+        class: 'splitter',
         onMousedown: () => startDrag(props.id, props.type),
       })
     }
