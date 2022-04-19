@@ -35,11 +35,11 @@
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --tag --push && pnpm publish"
   },
-  "dependencies": {
-    "@vueuse/core": "^8.2.6"
-  },
   "peerDependencies": {
     "vue": "^3.2.33"
+  },
+  "dependencies": {
+    "@vueuse/core": "^8.2.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.20.2",
