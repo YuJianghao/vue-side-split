@@ -36,6 +36,7 @@ export type PartKey = 'left'|'right'
 export type Part = ReturnType<typeof createPart>
 
 export const split = ref<{ idx: number; key: PartKey } | null>(null)
+export const gap = ref<number>(10)
 
 function getSign(key: PartKey) {
   switch (key) {
@@ -57,7 +58,7 @@ const drag = useAxisDrag(ref('x'), {
     function update(delta: number, idx: number) {
       if (idx < 0 || idx >= part.config.value.length)
         return
-      const min = Math.max(part.config.value[idx].min, idx ? 10 : 5)
+      const min = Math.max(part.config.value[idx].min, idx ? gap.value : gap.value / 2)
       const max = part.config.value[idx].max
       const current = part.raw.value[idx]
       const next = current + delta

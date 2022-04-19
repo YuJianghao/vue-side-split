@@ -1,6 +1,7 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
 import type { StyleValue } from 'vue'
+import { gap } from './logic'
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
@@ -66,8 +67,8 @@ export const SplitterPart = defineComponent({
     const style = computed<StyleValue>(() => {
       return {
         height: '100%',
-        width: '10px',
-        margin: '0 -5px',
+        width: `${gap.value}px`,
+        margin: `0 -${gap.value / 2}px`,
         background: 'green',
         zIndex: 1,
       }
