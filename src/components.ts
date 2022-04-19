@@ -191,6 +191,7 @@ export const SideSplit = defineComponent({
     const style = computed<StyleValue>(() => {
       return {
         display: 'flex',
+        userSelect: 'none',
         ...(vertical.value && { flexDirection: 'column' }),
       }
     })
