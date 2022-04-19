@@ -1,49 +1,32 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
 import type { PropType, StyleValue } from 'vue'
+import type { PartConfig } from './logic'
 import { createSideSplitContext, provideContext, useContext } from './logic'
-
-export const SideSplit = defineComponent({
-  name: 'SideSplit',
+export const SidePart = defineComponent({
+  name: 'SidePart',
   props: {
-    vertical: {
-      type: Boolean,
+    min: Number,
+    max: Number,
+    init: {
+      type: Number,
       required: true,
     },
   },
-  setup(props, { slots }) {
-    const context = createSideSplitContext()
-    watch(() => props.vertical, (v) => {
-      context.vertical.value = v
-    })
-    provideContext(context)
-    context.left.config.value = [
-      { min: 0, max: 150, init: 20 },
-      { min: 0, max: 150, init: 20 },
-      { min: 0, max: 150, init: 20 },
-    ]
-    context.right.config.value = [
-      { min: 0, max: 150, init: 20 },
-      { min: 0, max: 150, init: 20 },
-      { min: 0, max: 150, init: 20 },
-    ]
-    const { vertical, dragging } = context
-    const style = computed<StyleValue>(() => {
-      return {
-        display: 'flex',
-        userSelect: dragging.value ? 'none' : undefined,
-        ...(vertical.value && { flexDirection: 'column' }),
-      }
-    })
-    return () => {
-      const children = slots.default?.() ?? []
-      return h('div', { style: style.value }, children)
-    }
+  render() {
+    return this.$slots.default?.() ?? []
   },
 })
 
-export const SidePart = defineComponent({
-  name: 'SidePart',
+export const MainPart = defineComponent({
+  name: 'MainPart',
+  render() {
+    return this.$slots.default?.() ?? []
+  },
+})
+
+const RenderSidePart = defineComponent({
+  name: 'RenderSidePart',
   props: {
     width: {
       type: Number,
@@ -51,6 +34,7 @@ export const SidePart = defineComponent({
     },
   },
   setup(props, { slots }) {
+    const { dragging } = useContext()
     const style = computed<StyleValue>(() => {
       return {
         flexBasis: `${props.width}px`,
@@ -58,6 +42,7 @@ export const SidePart = defineComponent({
         flexShrink: 0,
         border: '1px solid red',
         overflow: 'hidden',
+        userSelect: dragging.value ? 'none' : undefined,
       }
     })
     return () => {
@@ -67,10 +52,10 @@ export const SidePart = defineComponent({
   },
 })
 
-export const MainPart = defineComponent({
-  name: 'MainPart',
+const RenderMainPart = defineComponent({
+  name: 'RenderMainPart',
   setup(_, { slots }) {
-    const { gap } = useContext()
+    const { gap, dragging } = useContext()
     const style = computed<StyleValue>(() => {
       return {
         flexGrow: 1,
@@ -78,6 +63,7 @@ export const MainPart = defineComponent({
         flexBasis: `${gap.value}px`,
         border: '1px solid blue',
         overflow: 'hidden',
+        userSelect: dragging.value ? 'none' : undefined,
       }
     })
     return () => {
@@ -140,7 +126,7 @@ export const Panel = defineComponent({
   props: {
     id: Number,
     type: {
-      type: String as PropType<'left'|'right'|'main'>,
+      type: String as PropType<'left' | 'right' | 'main'>,
       required: true,
     },
   },
@@ -150,15 +136,80 @@ export const Panel = defineComponent({
       const children = slots.default?.() ?? []
       switch (props.type) {
         case 'main':
-          return h(MainPart, () => children)
+          return h(RenderMainPart, () => children)
         case 'left':
         case 'right':
-          return h(SidePart, {
-            width: context[props.type].width.value[props.id!],
-          }, () => children)
+          return h(
+            RenderSidePart,
+            {
+              width: context[props.type].width.value[props.id!],
+            },
+            () => children,
+          )
         default:
           break
       }
+    }
+  },
+})
+
+export const SideSplit = defineComponent({
+  name: 'SideSplit',
+  props: {
+    vertical: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props, { slots }) {
+    const context = createSideSplitContext()
+    watch(
+      () => props.vertical,
+      (v) => {
+        context.vertical.value = v
+      },
+    )
+    provideContext(context)
+    const { vertical } = context
+    const style = computed<StyleValue>(() => {
+      return {
+        display: 'flex',
+        ...(vertical.value && { flexDirection: 'column' }),
+      }
+    })
+    return () => {
+      const children = slots.default?.() ?? []
+      const panels = children.filter(
+        ch => ch.type === SidePart || ch.type === MainPart,
+      )
+      // TODO check panels
+      const mainPanel = panels.find(ch => ch.type === MainPart)!
+      const mainPanelIdx = panels.indexOf(mainPanel)
+      const leftPanel = panels.slice(0, mainPanelIdx)
+      const leftConfig = leftPanel.map(ch => ch.props)
+      const rightPanel = panels.slice(mainPanelIdx + 1)
+      const rightConfig = rightPanel.map(ch => ch.props).reverse()
+      context.left.config.value = leftConfig as PartConfig[] // TODO parse props
+      context.right.config.value = rightConfig as PartConfig[] // TODO parse props
+      const content = [
+        ...leftPanel.map((ch, id) => [
+          // @ts-expect-error todo
+          h(Panel, { id, type: 'left' }, ch.children),
+          h(SplitterPart, { id, type: 'left' }),
+        ]),
+        // @ts-expect-error todo
+        h(Panel, { type: 'main' }, mainPanel.children),
+        ...rightPanel
+          .map((ch, id) =>
+            [
+              // @ts-expect-error todo
+              h(Panel, { id, type: 'right' }, ch.children),
+              h(SplitterPart, { id, type: 'right' }),
+            ].reverse(),
+          )
+          .reverse(),
+      ]
+      return h('div', { style: style.value }, content)
     }
   },
 })

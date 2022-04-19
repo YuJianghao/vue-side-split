@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
-import { Panel, SideSplit, SplitterPart } from '~/lib/components'
+import { MainPart, SidePart, SideSplit } from '~/lib/components'
 const vertical = ref(false)
 </script>
 
@@ -14,33 +14,27 @@ const vertical = ref(false)
     </label>
   </div>
   <SideSplit w-full h-100 border :vertical="vertical">
-    <Panel :id="0" type="left">
+    <SidePart :min="0" :init="10" :max="50">
       side1
-    </Panel>
-    <SplitterPart :id="0" type="left" />
-    <Panel :id="1" type="left">
+    </SidePart>
+    <SidePart :min="0" :init="20" :max="50">
       side2
-    </Panel>
-    <SplitterPart :id="1" type="left" />
-    <Panel :id="2" type="left">
+    </SidePart>
+    <SidePart :min="0" :init="30" :max="50">
       side3
-    </Panel>
-    <SplitterPart :id="2" type="left" />
-    <Panel type="main">
+    </SidePart>
+    <MainPart type="main">
       main
-    </Panel>
-    <SplitterPart :id="2" type="right" />
-    <Panel :id="2" type="right">
+    </MainPart>
+    <SidePart :min="0" :init="30" :max="50">
       side3
-    </Panel>
-    <SplitterPart :id="1" type="right" />
-    <Panel :id="1" type="right">
+    </SidePart>
+    <SidePart :min="0" :init="20" :max="50">
       side2
-    </Panel>
-    <SplitterPart :id="0" type="right" />
-    <Panel :id="0" type="right">
+    </SidePart>
+    <SidePart :min="0" :init="10" :max="50">
       side1
-    </Panel>
+    </SidePart>
   </SideSplit>
 </template>
 
