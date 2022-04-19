@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
+import { MainPart, SidePart, SideSplit } from '~/../../src'
 import Container from '~/components/Container.vue'
-import { MainPart, SidePart, SideSplit } from '~/lib'
 import Board from '~/components/Board.vue'
 const { t } = useI18n()
 </script>

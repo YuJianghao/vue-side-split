@@ -1,5 +1,5 @@
 /* eslint-disable vue/one-component-per-file */
-import { computed, defineComponent, h } from 'vue'
+import { computed, defineComponent, h, watch } from 'vue'
 import type { PropType, StyleValue } from 'vue'
 import type { PartConfig } from './logic'
 import { createSideSplitContext, provideContext, useContext } from './logic'

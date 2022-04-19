@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MainPart, SidePart, SideSplit } from '~/lib'
+import { MainPart, SidePart, SideSplit } from '~/../../src'
 import Board from '~/components/Board.vue'
 import Container from '~/components/Container.vue'
 const vertical = ref(false)

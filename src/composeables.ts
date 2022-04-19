@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useEventListener, useMouse } from '@vueuse/core'
 
 export interface Point{

@@ -1,4 +1,4 @@
-import { computed, inject, provide, ref } from 'vue'
+import { computed, inject, provide, ref, watch } from 'vue'
 import type { InjectionKey, Ref } from 'vue'
 import { useAxisDrag } from './composeables'
 
