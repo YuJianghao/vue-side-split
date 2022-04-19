@@ -22,10 +22,14 @@ export function useDrag({ onDrag, onDragEnd }: {
     onDrag(source.value, target.value)
   })
   useEventListener(window, 'mouseleave', () => {
+    if (!dragging.value)
+      return
     onDragEnd(source.value, target.value)
     resetDrag()
   })
   useEventListener(window, 'mouseup', () => {
+    if (!dragging.value)
+      return
     onDragEnd(source.value, target.value)
     resetDrag()
   })

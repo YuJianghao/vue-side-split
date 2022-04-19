@@ -3,9 +3,9 @@
 import { MainPart, SidePart, SideSplit, SplitterPart } from '~/lib/components'
 import { definePart, partMap, startDrag } from '~/lib/logic'
 definePart(ref([
-  { min: 50, max: 150, init: 100 },
-  { min: 50, max: 150, init: 100 },
-  { min: 50, max: 150, init: 100 },
+  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 100 },
+  { min: 0, max: 150, init: 100 },
 ]), 'left')
 const left = partMap.get('left')!
 </script>
