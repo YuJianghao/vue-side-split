@@ -1,12 +1,33 @@
 /* eslint-disable vue/one-component-per-file */
 import { computed, defineComponent, h } from 'vue'
-import type { StyleValue } from 'vue'
-import { useContext } from './logic'
+import type { PropType, StyleValue } from 'vue'
+import { createSideSplitContext, provideContext, useContext } from './logic'
 
 export const SideSplit = defineComponent({
   name: 'SideSplit',
-  setup(_, { slots }) {
-    const { dragging, vertical } = useContext()
+  props: {
+    vertical: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props, { slots }) {
+    const context = createSideSplitContext()
+    watch(() => props.vertical, (v) => {
+      context.vertical.value = v
+    })
+    provideContext(context)
+    context.left.config.value = [
+      { min: 0, max: 150, init: 20 },
+      { min: 0, max: 150, init: 20 },
+      { min: 0, max: 150, init: 20 },
+    ]
+    context.right.config.value = [
+      { min: 0, max: 150, init: 20 },
+      { min: 0, max: 150, init: 20 },
+      { min: 0, max: 150, init: 20 },
+    ]
+    const { vertical, dragging } = context
     const style = computed<StyleValue>(() => {
       return {
         display: 'flex',
@@ -68,8 +89,18 @@ export const MainPart = defineComponent({
 
 export const SplitterPart = defineComponent({
   name: 'SplitterPart',
-  setup() {
-    const { vertical, gap } = useContext()
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    type: {
+      type: String as PropType<'left' | 'right'>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { vertical, gap, startDrag } = useContext()
     const style = computed<StyleValue>(() => {
       const statics: StyleValue = {
         zIndex: 1,
@@ -96,7 +127,38 @@ export const SplitterPart = defineComponent({
       }
     })
     return () => {
-      return h('div', { style: style.value })
+      return h('div', {
+        style: style.value,
+        onMousedown: () => startDrag(props.id, props.type),
+      })
+    }
+  },
+})
+
+export const Panel = defineComponent({
+  name: 'Panel',
+  props: {
+    id: Number,
+    type: {
+      type: String as PropType<'left'|'right'|'main'>,
+      required: true,
+    },
+  },
+  setup(props, { slots }) {
+    const context = useContext()
+    return () => {
+      const children = slots.default?.() ?? []
+      switch (props.type) {
+        case 'main':
+          return h(MainPart, () => children)
+        case 'left':
+        case 'right':
+          return h(SidePart, {
+            width: context[props.type].width.value[props.id!],
+          }, () => children)
+        default:
+          break
+      }
     }
   },
 })

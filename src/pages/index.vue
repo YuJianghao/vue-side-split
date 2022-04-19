@@ -1,23 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
-import { MainPart, SidePart, SideSplit, SplitterPart } from '~/lib/components'
-import { createSideSplitContext, provideContext } from '~/lib/logic'
-const context = createSideSplitContext()
-context.left.config.value = [
-  { min: 0, max: 150, init: 20 },
-  { min: 0, max: 150, init: 20 },
-  { min: 0, max: 150, init: 20 },
-]
-context.right.config.value = [
-  { min: 0, max: 150, init: 20 },
-  { min: 0, max: 150, init: 20 },
-  { min: 0, max: 150, init: 20 },
-]
-const vertical = context.vertical
-const left = context.left
-const right = context.right
-const startDrag = context.startDrag
-provideContext(context)
+import { Panel, SideSplit, SplitterPart } from '~/lib/components'
+const vertical = ref(false)
 </script>
 
 <template>
@@ -29,34 +13,34 @@ provideContext(context)
       <div v-else i="carbon-checkbox" vertical-text-bottom inline-block />
     </label>
   </div>
-  <SideSplit w-full h-100 border>
-    <SidePart :width="left.width.value[0]">
+  <SideSplit w-full h-100 border :vertical="vertical">
+    <Panel :id="0" type="left">
       side1
-    </SidePart>
-    <SplitterPart @mousedown="startDrag(0,'left')" />
-    <SidePart :width="left.width.value[1]">
+    </Panel>
+    <SplitterPart :id="0" type="left" />
+    <Panel :id="1" type="left">
       side2
-    </SidePart>
-    <SplitterPart @mousedown="startDrag(1,'left')" />
-    <SidePart :width="left.width.value[2]">
+    </Panel>
+    <SplitterPart :id="1" type="left" />
+    <Panel :id="2" type="left">
       side3
-    </SidePart>
-    <SplitterPart @mousedown="startDrag(2,'left')" />
-    <MainPart>
+    </Panel>
+    <SplitterPart :id="2" type="left" />
+    <Panel type="main">
       main
-    </MainPart>
-    <SplitterPart @mousedown="startDrag(2,'right')" />
-    <SidePart :width="right.width.value[2]">
+    </Panel>
+    <SplitterPart :id="2" type="right" />
+    <Panel :id="2" type="right">
       side3
-    </SidePart>
-    <SplitterPart @mousedown="startDrag(1,'right')" />
-    <SidePart :width="right.width.value[1]">
+    </Panel>
+    <SplitterPart :id="1" type="right" />
+    <Panel :id="1" type="right">
       side2
-    </SidePart>
-    <SplitterPart @mousedown="startDrag(0,'right')" />
-    <SidePart :width="right.width.value[0]">
+    </Panel>
+    <SplitterPart :id="0" type="right" />
+    <Panel :id="0" type="right">
       side1
-    </SidePart>
+    </Panel>
   </SideSplit>
 </template>
 
