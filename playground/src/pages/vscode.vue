@@ -4,6 +4,12 @@ import { MainPart, SidePart, SideSplit } from '~/../../src'
 import Container from '~/components/Container.vue'
 import Board from '~/components/Board.vue'
 const { t } = useI18n()
+const sep = reactive({
+  top: 24,
+  bottom: 24,
+  nav: 46,
+  list: 200,
+})
 </script>
 <template>
   <div p6>
@@ -18,7 +24,7 @@ const { t } = useI18n()
       :gap="6"
       style="color: #eeeeee"
     >
-      <SidePart :min="24" :init="24" :max="24">
+      <SidePart v-model="sep.top" :min="24" :max="48">
         <div
           fit
           flex
@@ -51,10 +57,10 @@ const { t } = useI18n()
       </SidePart>
       <MainPart type="main">
         <SideSplit fit :gap="6">
-          <SidePart :min="46" :init="46" :max="46">
+          <SidePart v-model="sep.nav" :min="46" :max="92">
             <div style="background-color: #333333;" fit />
           </SidePart>
-          <SidePart :init="200" :max="500">
+          <SidePart v-model="sep.list" :max="500">
             <div style="background-color: #252526;" fit />
           </SidePart>
           <MainPart>
@@ -64,7 +70,7 @@ const { t } = useI18n()
           </MainPart>
         </SideSplit>
       </MainPart>
-      <SidePart :min="24" :init="24" :max="24">
+      <SidePart v-model="sep.bottom" :min="24" :max="48">
         <div fit style="background-color: #007acc" flex items-center>
           <div style="background-color: #16825d" h-full flex items-center px4>
             <div i="fluent-remote-20-regular" text-sm mr2 />

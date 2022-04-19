@@ -4,6 +4,14 @@ import Board from '~/components/Board.vue'
 import Container from '~/components/Container.vue'
 const vertical = ref(false)
 const { t } = useI18n()
+const sep = reactive({
+  l1: 30,
+  l2: 30,
+  l3: 30,
+  r1: 30,
+  r2: 30,
+  r3: 30,
+})
 </script>
 
 <template>
@@ -21,17 +29,17 @@ const { t } = useI18n()
   </div>
   <Container>
     <SideSplit class="index-page" w-full h-100 border border-gray-500:50 :vertical="vertical">
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.l1" :min="0" :max="50">
         <Board>
           1
         </Board>
       </SidePart>
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.l2" :min="0" :max="50">
         <Board>
           2
         </Board>
       </SidePart>
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.l3" :min="0" :max="50">
         <Board>
           3
         </Board>
@@ -41,17 +49,17 @@ const { t } = useI18n()
           Hi SideSplit
         </Board>
       </MainPart>
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.r1" :min="0" :max="50">
         <Board>
           3
         </Board>
       </SidePart>
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.r2" :min="0" :max="50">
         <Board>
           2
         </Board>
       </SidePart>
-      <SidePart :min="0" :init="30" :max="50">
+      <SidePart v-model="sep.r3" :min="0" :max="50">
         <Board>
           1
         </Board>
