@@ -1,6 +1,15 @@
 {
-  "private": true,
+  "name": "@winwin/vue-side-split",
+  "version": "0.0.0",
   "packageManager": "pnpm@6.32.3",
+  "author": {
+    "name": "winwin2011",
+    "email": "yjh2011@live.com"
+  },
+  "repository": {
+    "url": "https://github.com/YuJianghao/vue-side-split"
+  },
+  "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
