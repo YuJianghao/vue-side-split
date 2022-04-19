@@ -57,7 +57,7 @@ const drag = useAxisDrag(ref('x'), {
     function update(delta: number, idx: number) {
       if (idx < 0 || idx >= part.config.value.length)
         return
-      const min = part.config.value[idx].min
+      const min = Math.max(part.config.value[idx].min, idx ? 10 : 5)
       const max = part.config.value[idx].max
       const current = part.raw.value[idx]
       const next = current + delta
@@ -71,6 +71,7 @@ const drag = useAxisDrag(ref('x'), {
       }
       else {
         part.tmp.value[idx] = next
+        update(0, idx - 1)
       }
     }
     update(delta, idx)
