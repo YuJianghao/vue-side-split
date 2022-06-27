@@ -1,6 +1,6 @@
 {
   "name": "@winwin/vue-side-split",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "packageManager": "pnpm@6.32.3",
   "license": "MIT",
   "author": {
