@@ -192,6 +192,7 @@ export const SideSplit = defineComponent({
       return {
         display: 'flex',
         userSelect: 'none',
+        isolation: 'isolate',
         ...(vertical.value && { flexDirection: 'column' }),
       }
     })
