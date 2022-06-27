@@ -24,54 +24,47 @@ const sep = reactive({
     </label>
 
     <RouterLink class="icon-btn mx-2" to="/vscode" btn>
-      {{ t('button.demo') }}
+      {{ t("button.demo") }}
     </RouterLink>
   </div>
   <Container>
-    <SideSplit class="index-page" w-full h-100 border border-gray-500:50 :vertical="vertical">
+    <SideSplit
+      class="index-page"
+      w-full
+      h-100
+      border
+      border-gray-500:50
+      :vertical="vertical"
+    >
       <SidePart v-model="sep.l1" :min="0" :max="50">
-        <Board>
-          1
-        </Board>
+        <Board> 1 </Board>
       </SidePart>
       <SidePart v-model="sep.l2" :min="0" :max="50">
-        <Board>
-          2
-        </Board>
+        <Board> 2 </Board>
       </SidePart>
       <SidePart v-model="sep.l3" :min="0" :max="50">
-        <Board>
-          3
-        </Board>
+        <Board> 3 </Board>
       </SidePart>
-      <MainPart type="main">
-        <Board>
-          Hi SideSplit
-        </Board>
+      <MainPart>
+        <Board> Hi SideSplit </Board>
       </MainPart>
       <SidePart v-model="sep.r1" :min="0" :max="50">
-        <Board>
-          3
-        </Board>
+        <Board> 3 </Board>
       </SidePart>
       <SidePart v-model="sep.r2" :min="0" :max="50">
-        <Board>
-          2
-        </Board>
+        <Board> 2 </Board>
       </SidePart>
       <SidePart v-model="sep.r3" :min="0" :max="50">
-        <Board>
-          1
-        </Board>
+        <Board> 1 </Board>
       </SidePart>
     </SideSplit>
   </Container>
 </template>
 <style lang="less">
-.index-page > .splitter{
+.index-page > .splitter {
   background: rgba(127, 127, 127, 0.1);
-  transition: background .2s ease-in-out;
-  &:hover{
+  transition: background 0.2s ease-in-out;
+  &:hover {
     background: rgba(127, 127, 127, 0.5);
     backdrop-filter: blur(2px);
   }
