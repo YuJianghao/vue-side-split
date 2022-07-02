@@ -16,7 +16,7 @@ const { t } = useI18n()
     <a
       class="icon-btn mx-2"
       rel="noreferrer"
-      href="https://github.com/antfu/vitesse"
+      href="https://github.com/YuJianghao/vue-side-split"
       target="_blank"
       title="GitHub"
     >

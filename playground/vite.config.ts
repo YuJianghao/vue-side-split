@@ -17,7 +17,7 @@ import Unocss from 'unocss/vite'
 const markdownWrapperClasses = 'prose prose-sm m-auto text-left'
 
 export default defineConfig({
-  base: 'vue-side-split',
+  base: '/vue-side-split/',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,

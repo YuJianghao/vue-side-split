@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MainPart, SidePart, SideSplit } from '~/../../src'
+import { MainPart, SidePart, SideSplit } from '../side-split'
 import Board from '~/components/Board.vue'
 import Container from '~/components/Container.vue'
 const vertical = ref(false)
@@ -16,17 +16,11 @@ const sep = reactive({
 
 <template>
   <div p6 select-none>
-    <label whitespace-nowrap text-base>
-      vertical
-      <input v-model="vertical" type="checkbox" hidden>
-      <div v-if="vertical" i="carbon-checkbox-checked" icon />
-      <div v-else i="carbon-checkbox" icon />
-    </label>
-
     <RouterLink class="icon-btn mx-2" to="/vscode" btn>
       {{ t("button.demo") }}
     </RouterLink>
   </div>
+  <div pb2 select-none />
   <Container>
     <SideSplit
       class="index-page"
@@ -46,7 +40,19 @@ const sep = reactive({
         <Board> 3 </Board>
       </SidePart>
       <MainPart>
-        <Board> Hi SideSplit </Board>
+        <Board flex-col>
+          <div text-base>
+            Hi SideSplit
+          </div>
+          <div>
+            <label whitespace-nowrap text-base>
+              vertical
+              <input v-model="vertical" type="checkbox" hidden>
+              <div v-if="vertical" i="carbon-checkbox-checked" icon />
+              <div v-else i="carbon-checkbox" icon />
+            </label>
+          </div>
+        </Board>
       </MainPart>
       <SidePart v-model="sep.r1" :min="0" :max="50">
         <Board> 3 </Board>
