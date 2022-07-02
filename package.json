@@ -28,7 +28,7 @@
     "dev": "pkgroll --watch",
     "play": "vite playground --open --port 3333",
     "play:build": "vite build playground",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest",
     "test:e2e": "cypress open",
